@@ -8,7 +8,7 @@
 
       <mt-tab-container class="page-tabbar-container" v-model="selected">
         <mt-tab-container-item id="menuSongList">
-          <div v-for="item in list" :key="item.shareid">
+          <div v-for="(item, index) in list" :key="`song-${index}-${item.shareid || ''}`">
             <mt-cell :title="item.title === '' ? '-_-未获取到歌曲名称' : item.title" :to="`/song?shareid=${item.shareid}`" is-link>
               <img slot="icon" :src="item.avatar" width="24" height="24" style="border-radius: 50%;">
             </mt-cell>

@@ -3,10 +3,11 @@ import axios from 'axios'
 import { Toast } from 'mint-ui'
 const SONGLIST = []
 let PAGE = 1
-const SIZE = 15
-const BASE_DOMAIN = 'https://ggmusic.herokuapp.com'
-// 我自己的歌单UID
-let UID = '639d9d87232a328835'
+const SIZE = parseInt(process.env.VUE_APP_PAGE_SIZE) || 15
+// 从环境变量读取API地址
+const BASE_DOMAIN = process.env.VUE_APP_API_BASE_URL || 'http://localhost:13579'
+// 从环境变量读取默认UID
+let UID = process.env.VUE_APP_DEFAULT_UID || '639d9d87232a328835'
 // 演唱者信息
 let SINGER = {
   name: '',

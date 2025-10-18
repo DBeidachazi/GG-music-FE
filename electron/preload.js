@@ -1,0 +1,8 @@
+// Preload script for Electron security
+const { contextBridge } = require('electron')
+
+// 暴露安全的API给渲染进程
+contextBridge.exposeInMainWorld('electron', {
+  platform: process.platform,
+  version: process.versions.electron
+})

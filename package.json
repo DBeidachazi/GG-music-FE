@@ -1,20 +1,29 @@
 {
   "name": "gg-music",
   "version": "1.0.0",
-  "description": "Gordon的全民K歌歌单",
+  "description": "Gordon的全民K歌歌单 - Electron Desktop App",
   "author": "Gordon",
   "private": true,
+  "main": "electron/main.js",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
-    "unit": "jest --config test/unit/jest.conf.js --coverage",
-    "e2e": "node test/e2e/runner.js",
-    "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
-    "build": "node build/build.js"
+    "server": "node -r dotenv/config server/index.js",
+    "electron": "electron .",
+    "electron:dev": "concurrently \"npm run dev\" \"npm run server\" \"wait-on http://localhost:13580 && cross-env NODE_ENV=development electron .\"",
+    "build": "node build/build.js",
+    "build:electron": "npm run build && electron-builder",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:win": "npm run build && electron-builder --win",
+    "build:linux": "npm run build && electron-builder --linux"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "iconv-lite": "^0.7.0",
     "mint-ui": "^2.2.13",
     "style-loader": "^0.20.3",
     "vue": "^2.5.2",
@@ -37,9 +46,13 @@
     "babel-register": "^6.22.0",
     "chalk": "^2.0.1",
     "chromedriver": "^2.27.2",
+    "concurrently": "^7.6.0",
     "copy-webpack-plugin": "^4.0.1",
+    "cross-env": "^10.1.0",
     "cross-spawn": "^5.0.1",
     "css-loader": "^0.28.0",
+    "electron": "^22.3.27",
+    "electron-builder": "^24.13.3",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
@@ -73,10 +86,48 @@
     "vue-loader": "^13.3.0",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",
+    "wait-on": "^7.2.0",
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
     "webpack-merge": "^4.1.0"
+  },
+  "build": {
+    "appId": "io.igordonxiao.github.ggmusic",
+    "productName": "GG Music",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "server/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "build/logo.png",
+      "category": "public.app-category.music"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "icon": "build/logo.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "build/logo.png",
+      "category": "Audio"
+    }
   },
   "engines": {
     "node": ">= 6.0.0",

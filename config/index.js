@@ -4,6 +4,9 @@
 
 const path = require('path')
 
+// 从.env文件读取配置
+require('dotenv').config()
+
 module.exports = {
   dev: {
 
@@ -14,7 +17,7 @@ module.exports = {
 
     // Various Dev Server settings
     host: '0.0.0.0', // can be overwritten by process.env.HOST
-    port: 8000, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: process.env.VUE_APP_DEV_PORT || 13580, // 从环境变量读取端口
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
@@ -23,7 +26,7 @@ module.exports = {
     // Use Eslint Loader?
     // If true, your code will be linted during bundling and
     // linting errors and warnings will be shown in the console.
-    useEslint: true,
+    useEslint: false,
     // If true, eslint errors and warnings will also be shown in the error overlay
     // in the browser.
     showEslintErrorsInOverlay: false,
